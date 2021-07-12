@@ -1,6 +1,6 @@
 # senang (senang)
 
-A Quasar Framework app
+Not Mudah but Senang; Shopee clone built using Vue.js and Quasar Framework app. 
 
 ## Install the dependencies
 ```bash
