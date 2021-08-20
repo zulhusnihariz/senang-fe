@@ -6,7 +6,6 @@
           <q-icon name="shopping_bag" size="400px"></q-icon>
           <h6 class="q-ma-none text-h1 text-weight-regular">Senang</h6>
           <h6 class="text-h4 q-px-xl">
-            {{ $route.path }}
             The Leading Online Shop Platform in Southeast Asia and Taiwan
           </h6>
         </div>
