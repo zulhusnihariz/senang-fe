@@ -6,21 +6,29 @@ const routes = [
     children: [
       { name: 'Index', path: '/index', component: () => import('pages/Index.vue') },
       {
-        name: 'Account',
+        name: 'Account-Profile',
         path: '/user/account/profile',
         component: () => import('../pages/Account.vue'),
       },
       {
+        name: 'Account-Payment',
         path: '/user/account/payment',
         component: () => import('../pages/Account.vue'),
       },
       {
+        name: 'Account-Address',
         path: '/user/account/address',
         component: () => import('../pages/Account.vue'),
       },
       {
+        name: 'Account-Password',
         path: '/user/account/password',
         component: () => import('../pages/Account.vue'),
+      },
+      {
+        name: 'Store-ProductList',
+        path: '/user/product',
+        component: () => import('../pages/Store.vue'),
       },
       {
         name: 'Login',
