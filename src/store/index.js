@@ -2,6 +2,8 @@ import { store } from 'quasar/wrappers';
 import { createStore } from 'vuex';
 import authentication from './modules/authentication';
 import user from './modules/user';
+import location from './modules/location';
+import product from './modules/product';
 
 // import example from './module-example'
 
@@ -19,6 +21,8 @@ export default store(function (/* { ssrContext } */) {
     modules: {
       authentication,
       user,
+      location,
+      product,
       // example
     },
 
