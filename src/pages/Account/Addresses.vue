@@ -18,10 +18,11 @@
         <h6 class="q-my-none q-ml-md">New Address</h6>
 
         <br />
-        <q-form @submit="onSubmit" @reset="onReset">
+        <q-form @submit="submitAddress">
           <div class="row">
             <div class="col q-mx-md">
               <q-input
+                v-model="inputs.full_name"
                 outlined
                 dense
                 placeholder="Full Name"
@@ -31,6 +32,7 @@
             </div>
             <div class="col q-mx-md">
               <q-input
+                v-model="inputs.phone_number"
                 outlined
                 dense
                 placeholder="Phone Number"
@@ -42,18 +44,22 @@
           <div class="row q-mb-lg">
             <div class="col q-mx-md">
               <q-select
-                outlined
-                dense
-                options-dense
                 v-model="inputs.state"
                 virtual-scroll-item-size="7"
+                input-debounce="0"
                 placeholder="State"
+                option-value="state_id"
+                option-label="state_name"
+                emit-value
+                map-options
+                outlined
+                dense
                 use-input
+                options-dense
                 hide-selected
                 fill-input
-                input-debounce="0"
-                :options="optionsState"
-                @filter="filterFn"
+                :options="statesAPI"
+                @update:model-value="setAreasAPI"
               >
                 <template v-slot:no-option>
                   <q-item>
@@ -66,14 +72,18 @@
               <q-select
                 outlined
                 dense
-                v-model="model"
+                v-model="inputs.area"
                 placeholder="Area"
+                option-value="area_id"
+                option-label="area_name"
+                emit-value
+                map-options
                 use-input
                 hide-selected
                 fill-input
                 input-debounce="0"
-                :options="filteredAreas"
-                @filter="filterFn"
+                :options="areasAPI"
+                :disable="inputs.state"
               >
                 <template v-slot:no-option>
                   <q-item>
@@ -88,7 +98,7 @@
             class="q-mx-md"
             outlined
             dense
-            v-model="name"
+            v-model="inputs.postcode"
             placeholder="Postal Code"
             lazy-rules
             :rules="[val => (val && val.length > 0) || 'Please type something']"
@@ -98,7 +108,7 @@
             class="q-mx-md"
             outlined
             dense
-            v-model="age"
+            v-model="inputs.unit_number"
             placeholder="Unit Number, House Number, Building, Street Name"
             lazy-rules
             :rules="[val => (val && val.length > 0) || 'Please type something']"
@@ -115,36 +125,61 @@
 
 <script>
 import StateCities from '../../data/state-cities.js';
+
+import RepositoryFactory from '../../repositories/RepositoryFactory';
+const LocationRepository = RepositoryFactory.get('location');
+
 export default {
   data() {
     return {
-      states: Object.keys(StateCities),
-      areas: [],
+      statesAPI: null,
+      areasAPI: null,
       dialog: true,
 
       inputs: {
+        full_name: '',
+        phone_number: '',
         state: '',
+        area: '',
+        postcode: '',
+        unit_number: '',
       },
-      optionsState: this.states,
+      optionsState: this.statesAPI,
     };
   },
-  computed: {
-    filteredAreas() {
-      if (this.inputs.state) {
-        const filtered = Object.entries(StateCities).filter(el => el[0] === this.inputs.state);
 
-        return filtered[0][1];
-      }
-
-      return [];
-    },
+  async created() {
+    await this.getAllStates();
   },
+  computed: {},
 
   methods: {
+    sayHello() {
+      console.log('hello');
+    },
+    getAllStates: async function () {
+      const response = await LocationRepository.getAllStates().catch(err => console.log(err));
+      this.statesAPI = response.data.states;
+    },
+    getAreasByID: async function () {
+      const response = await LocationRepository.getAreasByID(this.inputs.state).catch(err =>
+        console.log(err),
+      );
+
+      this.areasAPI = response.data.areas;
+    },
+    setAreasAPI: async function () {
+      this.inputs.area = '';
+
+      await this.getAreasByID().catch(err => console.log(err));
+    },
+    submitAddress: async function () {
+      console.log(this.inputs);
+    },
     filterFn(val, update, abort) {
       update(() => {
         const needle = val.toLowerCase();
-        this.optionsState = this.states.filter(v => v.toLowerCase().indexOf(needle) > -1);
+        this.optionsState = this.statesAPI.filter(v => v.toLowerCase().indexOf(needle) > -1);
       });
     },
   },
