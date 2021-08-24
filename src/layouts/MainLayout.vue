@@ -1,38 +1,82 @@
 <template>
   <q-layout view="hHh lpR fFf">
     <q-header bordered class="bg-secondary text-black">
-      <q-toolbar :class="[{ 'bg-primary text-white': $route.path.match('auth') ? false : true }]">
-        <q-toolbar-title @click="$router.push({ name: 'Home' })" class="cursor-pointer">
-          <q-avatar>
-            <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" />
-          </q-avatar>
-          <span class="q-ml-sm">Senang</span>
-        </q-toolbar-title>
-        <div
-          v-if="$route.path.match('auth') ? false : true"
-          class="q-mr-xl text-weight-regular text-subtitle1 cursor-pointer"
-        >
-          <q-menu>
-            <q-list style="min-width: 100px">
-              <router-link :to="{ name: 'Account' }" style="text-decoration: none; color: unset">
-                <q-item clickable v-close-popup>
-                  <q-item-section>My Account</q-item-section>
-                </q-item>
-              </router-link>
+      <q-toolbar
+        style="height: 150px"
+        :class="[
+          {
+            'q-px-xl row items-center bg-primary text-white': $route.path.match('auth')
+              ? false
+              : true,
+          },
+        ]"
+      >
+        <template v-if="$route.path.match('auth') ? false : true">
+          <div class="column q-px-xl full-width text-weight-regular">
+            <div id="header-top" class="self-end q-mr-xl text-subtitle1">
+              <q-list class="row cursor-pointer">
+                <q-item class="items-center q-px-sm"
+                  ><q-icon name="notifications" size="sm" /><span class="q-ml-sm"
+                    >Notifications</span
+                  ></q-item
+                >
+                <q-item class="items-center q-px-sm"
+                  ><q-icon name="help" size="sm" /> <span class="q-ml-sm">Help</span></q-item
+                >
+                <q-item class="items-center justify-center q-px-sm"
+                  ><q-icon name="account_circle" size="sm" />
+                  <span class="q-ml-sm">{{ user.data.username }}</span
+                  ><q-menu>
+                    <q-list style="min-width: 100px">
+                      <router-link
+                        :to="{ name: 'Account-Profile' }"
+                        style="text-decoration: none; color: unset"
+                      >
+                        <q-item clickable v-close-popup>
+                          <q-item-section>My Account</q-item-section>
+                        </q-item>
+                      </router-link>
 
-              <q-item clickable v-close-popup>
-                <q-item-section>My Purchase</q-item-section>
-              </q-item>
-              <q-separator />
-              <router-link :to="{ name: 'Login' }" style="text-decoration: none; color: unset">
-                <q-item @click="removeUser" clickable v-close-popup>
-                  <q-item-section> Logout </q-item-section>
+                      <q-item clickable v-close-popup>
+                        <q-item-section>My Purchase</q-item-section>
+                      </q-item>
+                      <q-separator />
+                      <router-link
+                        :to="{ name: 'Login' }"
+                        style="text-decoration: none; color: unset"
+                      >
+                        <q-item @click="removeUser" clickable v-close-popup>
+                          <q-item-section> Logout </q-item-section>
+                        </q-item>
+                      </router-link>
+                    </q-list>
+                  </q-menu>
                 </q-item>
-              </router-link>
-            </q-list>
-          </q-menu>
-          <q-icon name="account_circle" size="lg"> </q-icon> <span>{{ user.data.username }}</span>
-        </div>
+              </q-list>
+            </div>
+            <q-toolbar-title id="header-middle" class="row items-center" style="margin-left: 12%">
+              <div class="cursor-pointer text-h4" @click="$router.push({ name: 'Home' })">
+                <q-avatar>
+                  <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" />
+                </q-avatar>
+                <span class="q-ml-sm">Senang</span>
+              </div>
+              <q-input
+                class="q-ml-xl bg-white text-subtitle-1"
+                style="width: 50%"
+                placeholder="Search for products, brands or shops"
+                outlined
+              >
+                <q-btn
+                  class="q-my-sm bg-primary text-white"
+                  icon="search"
+                  style="width: 10%"
+                  @click="$router.push({ name: 'Store-ProductList' })"
+                />
+              </q-input>
+            </q-toolbar-title>
+          </div>
+        </template>
       </q-toolbar>
     </q-header>
 
@@ -96,6 +140,7 @@ import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'MainLayout',
+
   data() {
     return {
       menu: false,
