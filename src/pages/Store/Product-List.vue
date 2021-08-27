@@ -23,7 +23,14 @@
 
     <div class="row q-gutter-md">
       <template v-for="(item, index) in products" :key="index">
-        <q-card class="cursor-pointer" style="width: 272px; height: 375px">
+        <!-- :class="[{ 'card-hover': isHovering }, 'cursor-pointer']" -->
+        <q-card
+          :ref="`card${index}`"
+          class="cursor-pointer"
+          style="width: 272px; height: 375px"
+          @mouseover="addCardHover(index)"
+          @mouseout="removeCardHover(index)"
+        >
           <q-img style="max-width: 300px; height: 200px" :src="`${item.image}`" :fit="contain" />
 
           <q-card-section>
@@ -52,6 +59,7 @@ export default {
   data() {
     return {
       dialog: true,
+      isHovering: false,
 
       filter: {
         price: '',
@@ -66,15 +74,26 @@ export default {
     ...mapGetters('product', ['products', 'categories']),
   },
 
-  methods: {},
+  methods: {
+    addCardHover(index) {
+      this.$refs[`card${index}`].$el.classList.add('card-hover');
+    },
+    removeCardHover(index) {
+      this.$refs[`card${index}`].$el.classList.remove('card-hover');
+    },
+  },
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .q-menu {
   height: 50px;
 }
 .filter-field {
   width: 170px;
+}
+.card-hover {
+  border: 1px solid $primary;
+  transform: translateY(-0.5em);
 }
 </style>
