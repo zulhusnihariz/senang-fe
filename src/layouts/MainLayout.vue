@@ -15,18 +15,18 @@
           <div class="column q-px-xl full-width text-weight-regular">
             <div id="header-top" class="self-end q-mr-xl text-subtitle1">
               <q-list class="row cursor-pointer">
-                <q-item class="items-center q-px-sm"
-                  ><q-icon name="notifications" size="sm" /><span class="q-ml-sm"
-                    >Notifications</span
-                  ></q-item
-                >
-                <q-item class="items-center q-px-sm"
-                  ><q-icon name="help" size="sm" /> <span class="q-ml-sm">Help</span></q-item
-                >
-                <q-item class="items-center justify-center q-px-sm"
-                  ><q-icon name="account_circle" size="sm" />
-                  <span class="q-ml-sm">{{ user.data.username }}</span
-                  ><q-menu>
+                <q-item class="items-center q-px-sm">
+                  <q-icon name="notifications" size="sm" />
+                  <span class="q-ml-sm">Notifications</span>
+                </q-item>
+                <q-item class="items-center q-px-sm">
+                  <q-icon name="help" size="sm" />
+                  <span class="q-ml-sm">Help</span>
+                </q-item>
+                <q-item class="items-center justify-center q-px-sm">
+                  <q-icon name="account_circle" size="sm" />
+                  <span class="q-ml-sm">{{ user.data.username }}</span>
+                  <q-menu>
                     <q-list style="min-width: 100px">
                       <router-link
                         :to="{ name: 'Account-Profile' }"
@@ -46,7 +46,7 @@
                         style="text-decoration: none; color: unset"
                       >
                         <q-item @click="removeUser" clickable v-close-popup>
-                          <q-item-section> Logout </q-item-section>
+                          <q-item-section>Logout</q-item-section>
                         </q-item>
                       </router-link>
                     </q-list>
@@ -61,19 +61,8 @@
                 </q-avatar>
                 <span class="q-ml-sm">Senang</span>
               </div>
-              <q-input
-                class="q-ml-xl bg-white text-subtitle-1"
-                style="width: 50%"
-                placeholder="Search for products, brands or shops"
-                outlined
-              >
-                <q-btn
-                  class="q-my-sm bg-primary text-white"
-                  icon="search"
-                  style="width: 10%"
-                  @click="$router.push({ name: 'Store-ProductList' })"
-                />
-              </q-input>
+
+              <SearchField />
             </q-toolbar-title>
           </div>
         </template>
@@ -89,6 +78,8 @@
 <script>
 import { mapActions } from 'vuex';
 import { mapGetters } from 'vuex';
+import { defineComponent, ref } from 'vue';
+import SearchField from './SearchField';
 // import EssentialLink from 'components/EssentialLink.vue';
 
 const linksList = [
@@ -136,10 +127,9 @@ const linksList = [
   },
 ];
 
-import { defineComponent, ref } from 'vue';
-
 export default defineComponent({
   name: 'MainLayout',
+  components: { SearchField },
 
   data() {
     return {

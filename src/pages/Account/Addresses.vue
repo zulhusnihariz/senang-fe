@@ -151,7 +151,6 @@ export default {
   async created() {
     await this.getAllStates();
   },
-  computed: {},
 
   methods: {
     sayHello() {
