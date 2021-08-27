@@ -6,8 +6,7 @@
     <div class="col-3 full-height column items-end">
       <div>
         <div class="q-mb-md q-ml-none text-h6 text-weight-bold items-center">
-          <q-icon name="filter_alt" size="sm"> </q-icon>
-          {{ query }}
+          <q-icon name="filter_alt" size="sm"></q-icon>
 
           <span class="q-ml-md">SEARCH FILTER</span>
 
@@ -19,11 +18,11 @@
             <q-item-section class="text-weight-regular">
               <div>
                 <q-option-group
-                  v-model="selected.category"
+                  v-model="selected.category_id"
                   :options="computedCategories"
                   color="green"
                   type="checkbox"
-                  @update:model-value="setCategoryQuery"
+                  @update:model-value="setQuery"
                 />
               </div>
             </q-item-section>
@@ -59,15 +58,15 @@
                 </div>
               </div>
             </q-item-section>
-            <q-item-section
-              ><q-btn
-                :disable="!selected.min_price && !selected.max_price"
+            <q-item-section>
+              <q-btn
+                :disable="!selected.min_price || !selected.max_price"
                 class="bg-primary text-white"
-                @click="setPriceQuery"
+                @click="setQuery"
               >
-                APPLY</q-btn
-              ></q-item-section
-            >
+                APPLY
+              </q-btn>
+            </q-item-section>
           </q-item>
         </q-list>
       </div>
@@ -103,7 +102,7 @@ export default {
   data() {
     return {
       selected: {
-        category: [],
+        category_id: [],
         min_price: null,
         max_price: null,
       },
@@ -120,63 +119,23 @@ export default {
     /* -------------------------------------------------------------------------- */
     /*                                QUERY METHODS                               */
     /* -------------------------------------------------------------------------- */
-    setQuery: function () {
-      /* 
+    setQuery: async function () {
+      const finalQuery = {};
 
-      const initialQuery = this.$route.query
-      const finalQuery = {}
+      // setup query object for $router.push()
+      Object.keys(this.selected).forEach(key => {
+        if (key.match('category') && !!this.selected[key].length)
+          finalQuery[key] = this.selected[key];
 
-      const selectedArray = Object.keys(this.selected)
-
-      selectedArray.forEach(key =>{
-
-        if (key.match('category') && !!this.selected[key].length) finalQuery[key] = this.selected[key]
-        if (key.match('price') && !!this.selected[key]) finalQuery[key] = this.selected[key]
-
-      })
-
-      console.log(finalQuery)
-
-      this.$router.replace({query:null})
-
-      this.$router.push({path:'/user/product', query: finalQuery})
-
-      */
-
-      return Object.assign({}, this.$route.query, newObject);
-    },
-
-    setCategoryQuery: async function (value) {
-      if (this.selected.category.length > 0) {
-        this.$router.push({ path: '/user/product', query: { category: [value] } });
-        console.log('hello');
-        const response = await this.filterProductByCategory({
-          category_id: this.selected.category,
-        });
-
-        if (response.data) await this.setProducts(response.data);
-      } else {
-        this.$router.replace({ query: null });
-        await this.getAllProduct();
-      }
-    },
-
-    setPriceQuery: async function () {
-      const priceArray = ['min_price', 'max_price'];
-      let priceQuery = {};
-
-      console.log('before:', priceQuery, this.selected.min_price, this.selected.max_price);
-
-      priceArray.forEach(el => {
-        if (!!this.selected[el]) priceQuery[el] = this.selected[el];
+        if (key.match('price') && !!this.selected[key]) finalQuery[key] = this.selected[key];
       });
 
-      console.log('after:', priceQuery);
+      this.$router.push({ path: '/user/product', query: finalQuery });
 
-      this.$router.push({
-        path: '/user/product',
-        query: this.setQuery(priceQuery),
-      });
+      // if no filter applied, trigger getAllProduct; else trigger getFilteredProducts
+      !!Object.keys(finalQuery).length
+        ? await this.getFilteredProducts(finalQuery)
+        : await this.getAllProduct();
     },
 
     /* -------------------------------------------------------------------------- */
@@ -185,19 +144,16 @@ export default {
 
     getAllProduct: async function () {
       const response = await ProductRepository.getAllProduct();
-
       if (response.data) await this.setProducts(response.data);
     },
 
     getAllCategory: async function () {
       const response = await ProductRepository.getAllCategory();
-
       if (response.data) await this.setCategories(response.data);
     },
-
-    filterProductByCategory: async function (id) {
-      const response = await ProductRepository.filterProductByCategory(id);
-      return response;
+    getFilteredProducts: async function (data) {
+      const response = await ProductRepository.filterProduct(data);
+      if (response.data) await this.setProducts(response.data);
     },
   },
 
@@ -207,6 +163,18 @@ export default {
       return this.categories.map(el => {
         return { value: el.category_id, label: el.category_name };
       });
+    },
+    checkMinMaxPrice() {
+      return [`${this.selected.min_price}`, `${this.selected.max_price}`];
+    },
+  },
+  watch: {
+    // After min & max price filter applied, if both field is emptied, getAllProduct will be triggered automatically
+    checkMinMaxPrice: async function (newVal, oldVal) {
+      let [oldMin, newMin] = [oldVal[0], newVal[0]];
+      let [oldMax, newMax] = [oldVal[1], newVal[1]];
+
+      if (!!!newMin.length && !!!newMax.length) await this.getAllProduct();
     },
   },
 };
