@@ -70,6 +70,7 @@
     </q-header>
 
     <q-page-container>
+      <Cart />
       <router-view />
     </q-page-container>
   </q-layout>
@@ -81,6 +82,7 @@ import { mapGetters } from 'vuex';
 import { defineComponent, ref } from 'vue';
 import SearchField from './SearchField';
 // import EssentialLink from 'components/EssentialLink.vue';
+import Cart from '../pages/Store/Cart';
 
 const linksList = [
   {
@@ -129,7 +131,7 @@ const linksList = [
 
 export default defineComponent({
   name: 'MainLayout',
-  components: { SearchField },
+  components: { SearchField, Cart },
 
   data() {
     return {
