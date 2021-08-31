@@ -23,7 +23,7 @@ const mutations = {
   // },
   setUser(state, payload) {
     state.user.data = payload.user;
-    state.user.isAuthenticated = payload.token;
+    state.user.isAuthenticated = true;
   },
   removeUser(state) {
     state.user.data = null;
@@ -36,17 +36,21 @@ const actions = {
   // },
 
   setUser({ commit }, payload) {
-    if (payload && payload.token) {
-      localStorage.setItem('user', JSON.stringify(payload.user));
+    if (payload && payload.accessToken) {
+      localStorage.setItem(
+        'user',
+        JSON.stringify({ ...payload.user, accessToken: payload.accessToken }),
+      );
       localStorage.setItem('isAuthenticated', true);
     }
+
     commit('setUser', payload);
+
+    return true;
   },
   removeUser() {
     localStorage.removeItem('user');
     localStorage.removeItem('isAuthenticated');
-
-    commit('setUser');
   },
 };
 

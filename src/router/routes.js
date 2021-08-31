@@ -3,8 +3,14 @@ const routes = [
     name: 'Home',
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
+    beforeEnter: (to, from, next) => {
+      if (!!JSON.parse(localStorage.getItem('isAuthenticated'))) {
+        next();
+      } else {
+        next({ path: '/auth/login' });
+      }
+    },
     children: [
-      { name: 'Index', path: '/index', component: () => import('pages/Index.vue') },
       {
         name: 'Account-Profile',
         path: '/user/account/profile',
@@ -30,27 +36,50 @@ const routes = [
         path: '/user/product',
         component: () => import('../pages/Store.vue'),
       },
-      {
-        name: 'Login',
-        path: '/auth/login',
-        component: () => import('../pages/Authentication/Login.vue'),
-      },
-      {
-        name: 'Register',
-        path: '/auth/register',
-        component: () => import('../pages/Authentication/Register.vue'),
-      },
     ],
   },
+  {
+    name: 'Login',
+    path: '/auth/login',
+    component: () => import('../pages/Authentication/Login.vue'),
+    beforeEnter: (to, from, next) => {
+      if (!!JSON.parse(localStorage.getItem('isAuthenticated'))) {
+        next({ name: 'Home' });
+        // next();
+      } else {
+        next();
+      }
+    },
+  },
+  {
+    name: 'Register',
+    path: '/auth/register',
+    component: () => import('../pages/Authentication/Register.vue'),
+  },
+  {
+    name: 'Cart',
+    path: '/testing/cart',
+    component: () => import('../pages/Store/Cart.vue'),
+  },
+
   // {
-  //   name: 'Login',
-  //   path: '/auth/login',
-  //   component: () => import('../pages/Authentication/Login.vue'),
-  // },
-  // {
-  //   name: 'Register',
-  //   path: '/auth/register',
-  //   component: () => import('../pages/Authentication/Register.vue'),
+  //   beforeRouteEnter(to, from, next) {
+  //     const notAuthRoutes = ['Login', 'Register'];
+
+  //     console.log('hello');
+
+  //     if (JSON.parse(localStorage.getItem('isAuthenticated'))) {
+  //       connsole.log('beforeRouteEnter top');
+  //       const isLoginOrRegister = notAuthRoutes.some(el === to.name);
+
+  //       if (isLoginOrRegister) next({ name: 'Home' });
+  //       else next();
+  //     } else {
+  //       connsole.log('beforeRouteEnter bottom');
+
+  //       next({ name: 'Login' });
+  //     }
+  //   },
   // },
 
   // Always leave this as last one,
