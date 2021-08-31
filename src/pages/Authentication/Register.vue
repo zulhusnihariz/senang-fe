@@ -48,15 +48,16 @@
 
           <h6 class="text-subtitle1 text-center q-mt-md q-mb-lg">
             By signing up, you agree to Senang's
-            <span class="text-primary">Terms of Service</span> &
+            <span class="text-primary">Terms of Service</span>
+            &
             <span class="text-primary">Privacy Policy</span>
           </h6>
 
-          <h6 class="q-mt-xl text-weight-medium">
+          <h6 class="q-mt-lg text-weight-medium">
             <span class="text-grey-5 q-mr-sm">Have an account?</span>
-            <router-link :to="'login'" class="text-primary" style="text-decoration: none"
-              >Log In</router-link
-            >
+            <router-link :to="'login'" class="text-primary" style="text-decoration: none">
+              Log In
+            </router-link>
           </h6>
         </q-card>
       </div>
@@ -108,6 +109,7 @@ export default {
 
 <style scoped>
 #main-wrapper {
-  height: 88vh;
+  margin: 10vh 0;
+  height: 80vh;
 }
 </style>

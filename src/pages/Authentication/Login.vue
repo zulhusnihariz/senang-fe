@@ -1,7 +1,7 @@
 <template>
-  <div id="main-wrapper">
-    <div class="row q-px-xl bg-primary text-white text-center" style="height: 100%">
-      <div class="col-12 col-md column justify-center" style="height: 100%">
+  <div id="main-wrapper" class="bg-primary">
+    <div class="row bg-primary q-px-xl text-white text-center" style="height: 100%">
+      <div class="col column justify-center" style="height: 100%">
         <div>
           <q-icon name="shopping_bag" size="400px"></q-icon>
           <h6 class="q-ma-none text-h1 text-weight-regular">Senang</h6>
@@ -10,7 +10,7 @@
           </h6>
         </div>
       </div>
-      <div class="col-12 col-md column justify-center items-center" style="height: 100%">
+      <div class="col column justify-center items-center" style="height: 100%">
         <q-card class="q-pa-xl text-black" style="height: 70%; width: 60%">
           <h6 class="q-mt-none q-mb-lg text-h4 text-left">Log in</h6>
           <q-form @submit="loginUser" class="full-width">
@@ -43,7 +43,7 @@
             />
           </q-form>
           <h6 class="text-subtitle1 text-left q-mt-md q-mb-lg text-blue-7">
-            <span> Forgot Password</span>
+            <span>Forgot Password</span>
           </h6>
 
           <q-separator />
@@ -54,8 +54,9 @@
               :to="{ name: 'Register' }"
               class="text-primary"
               style="text-decoration: none"
-              >Sign Up</router-link
             >
+              Sign Up
+            </router-link>
           </h6>
         </q-card>
       </div>
@@ -80,16 +81,19 @@ export default {
       },
     };
   },
+  create() {
+    console.log('initiating login page');
+  },
   methods: {
     ...mapActions('authentication', ['setUser']),
     async loginUser() {
-      console.log('inside loginUser', this.inputs);
       try {
         const response = await AuthenticationRepository.login(this.inputs);
 
-        if (response.data.token) {
+        if (!!response.data.accessToken) {
           await this.setUser(response.data);
-          await this.$router.push({ name: 'Index' });
+
+          this.$router.push({ name: 'Home' });
         } else {
           Notify.create({
             color: 'primary',
@@ -114,7 +118,13 @@ export default {
 span {
   cursor: pointer;
 }
+
+#main-wrapper::before {
+  background-color: white;
+  height: 20vh;
+}
 #main-wrapper {
-  height: 100%;
+  margin: 10vh 0;
+  height: 80vh;
 }
 </style>
