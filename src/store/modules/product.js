@@ -25,8 +25,7 @@ const mutations = {
     state.categories = payload;
   },
 
-  setCurrentCart(state, payload) {
-    console.log(state.currentCart);
+  addCurrentCart(state, payload) {
     const index = state.currentCart.findIndex(el => el.productId === payload.productId);
 
     // Check for existing cart in local storage
@@ -34,6 +33,7 @@ const mutations = {
       // if cart exists and product is currently inside the cart
       // update payload quantity to be the same as existing quantity
       // remove existing product data and replace with the new product data
+
       payload.quantity = state.currentCart[index].quantity + 1;
       state.currentCart.splice(index, 1, payload); // remove 1 item at given index and replace with payload
     } else if (!!state.currentCart.length && index === -1) {
@@ -49,6 +49,36 @@ const mutations = {
 
     localStorage.setItem('cart', JSON.stringify(state.currentCart));
   },
+  removeCurrentCart(state, payload) {
+    const index = state.currentCart.findIndex(el => el.productId === payload.productId);
+
+    // Check for existing cart in local storage
+
+    // if cart exists and product is currently inside the cart
+    // update payload quantity to be the same as existing quantity
+    // remove existing product data and replace with the new product data
+
+    payload.quantity = state.currentCart[index].quantity - 1;
+
+    if (payload.quantity <= 0) {
+      state.currentCart.splice(index, 1);
+    } else {
+      state.currentCart.splice(index, 1, payload); // remove 1 item at given index and replace with payload
+    }
+
+    localStorage.setItem('cart', JSON.stringify(state.currentCart));
+  },
+  setCheckoutData(state) {
+    console.log(state.currentCart);
+
+    // {...el} -->  avoid from mutating state.currentCart
+    let lineItems = state.currentCart.map(({ ...el }) => ({
+      prices: el.prices[el.currency],
+      quantity: el.quantity,
+    }));
+
+    console.log(lineItems);
+  },
 };
 const actions = {
   async setProducts({ commit }, payload) {
@@ -58,9 +88,13 @@ const actions = {
     commit('setCategories', payload);
   },
   async addProductToCart({ commit }, payload) {
-    commit('setCurrentCart', payload);
-
-    // Check if product id exists
+    commit('addCurrentCart', payload);
+  },
+  async removeProductFromCart({ commit }, payload) {
+    commit('removeCurrentCart', payload);
+  },
+  async proceedToCheckout({ commit }, payload) {
+    commit('setCheckoutData', payload);
   },
 };
 

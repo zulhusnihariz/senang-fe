@@ -2,6 +2,10 @@ const axios = require('axios');
 
 const baseURL = 'http://localhost:8000/api/senang/product';
 
+axios.defaults.headers.common['x-token'] = `Bearer ${
+  JSON.parse(localStorage.getItem('user')).accessToken
+}`;
+
 export default {
   getAllProduct() {
     return axios.get(`${baseURL}/`);
@@ -26,5 +30,9 @@ export default {
   },
   getAllCategory() {
     return axios.get(`${baseURL}/category`);
+  },
+
+  getReviveProducts() {
+    return axios.get('');
   },
 };
