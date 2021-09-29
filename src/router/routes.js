@@ -56,11 +56,6 @@ const routes = [
     path: '/auth/register',
     component: () => import('../pages/Authentication/Register.vue'),
   },
-  {
-    name: 'Cart',
-    path: '/testing/cart',
-    component: () => import('../pages/Store/Cart.vue'),
-  },
 
   // {
   //   beforeRouteEnter(to, from, next) {

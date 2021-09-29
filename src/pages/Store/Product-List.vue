@@ -1,12 +1,10 @@
 <template>
   <div class="q-mb-xl text-h5 text-weight-light">
     <div class="row q-mr-lg">
-      <q-icon name="lightbulb" size="md"> </q-icon>
+      <q-icon name="lightbulb" size="md"></q-icon>
       <h6 class="no-margin text-weight-light">Search Result for --insert search input here--</h6>
     </div>
-
     <br />
-
     <div style="height: 80px" class="bg-grey-3 flex items-center">
       <p class="q-ma-none q-ml-md text-subtitle1">Sort by</p>
       <q-select
@@ -18,9 +16,7 @@
         borderless
       />
     </div>
-
     <br />
-
     <div class="row q-gutter-md">
       <template v-for="(item, index) in products" :key="index">
         <!-- :class="[{ 'card-hover': isHovering }, 'cursor-pointer']" -->
@@ -28,6 +24,7 @@
           :ref="`card${index}`"
           class="cursor-pointer"
           style="width: 272px; height: 375px"
+          @click="dialog.order = true"
           @mouseover="addCardHover(index)"
           @mouseout="removeCardHover(index)"
         >
@@ -45,24 +42,31 @@
       </template>
     </div>
 
-    <!-- {{ products }} -->
+    <q-dialog v-model="dialog.order">
+      <Cart />
+    </q-dialog>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 import { mapActions } from 'vuex';
+import Cart from './Cart';
 
 // import RepositoryFactory from '../../repositories/RepositoryFactory';
 
 export default {
+  components: { Cart },
   data() {
     return {
-      dialog: true,
       isHovering: false,
 
       filter: {
         price: '',
+      },
+
+      dialog: {
+        order: false,
       },
 
       filterOptions: ['Low to High', 'High to Low'],
