@@ -11,21 +11,21 @@
     <!-- -------------------------------------------------------------------------- -->
     <div class="row text-h6 text-weight-regular">
       <div class="col-3 column content-end items-end">
-        <div class="row q-mb-xl">Username</div>
-        <div class="row q-mb-xl">Name</div>
-        <div class="row q-mb-xl">Email</div>
-        <div class="row q-mb-xl">Contact Number</div>
-        <!-- <div class="row q-mb-xl">Shop Name</div> -->
-        <div class="row q-mb-xl">Birth Date</div>
-        <div class="row q-mb-xl"></div>
+        <div class="row q-mb-lg">Username</div>
+        <div class="row q-mb-lg">Name</div>
+        <div class="row q-mb-lg">Email</div>
+        <div class="row q-mb-lg">Contact Number</div>
+        <!-- <div class="row q-mb-lg">Shop Name</div> -->
+        <div class="row q-mb-lg">Birth Date</div>
+        <div class="row q-mb-lg"></div>
       </div>
 
       <!-- -------------------------------------------------------------------------- -->
       <!--                                    Input                                   -->
       <!-- -------------------------------------------------------------------------- -->
-      <div class="col-9 q-pl-lg">
-        <div class="row q-mb-xl">{{ inputs.username }}</div>
-        <div class="row q-mb-xl" style="height: 32px">
+      <div class="col-9 column items-start q-pl-lg">
+        <div class="row q-mb-lg">{{ inputs.username }}</div>
+        <div class="row q-mb-lg">
           <q-input v-model="inputs.firstName" placeholder="First name" outlined dense />
           <q-input
             v-model="inputs.lastName"
@@ -36,10 +36,10 @@
           />
         </div>
 
-        <div class="row q-mb-xl">{{ inputs.email }}</div>
-        <div class="row q-mb-xl">{{ inputs.contactNumber || '-' }}</div>
-        <!-- <div class="row q-mb-xl">Shop Name</div> -->
-        <div class="row q-mb-xl" style="height: 32px">
+        <div class="row q-mb-lg">{{ inputs.email || '-' }}</div>
+        <div class="row q-mb-lg">{{ inputs.contactNumber || '-' }}</div>
+        <!-- <div class="row q-mb-lg">Shop Name</div> -->
+        <div class="row q-mb-lg" style="height: 32px">
           <q-input v-model="inputs.birthDate" :rules="['inputs.birthDate']" outlined dense>
             <template v-slot:append>
               <q-icon name="event" class="cursor-pointer">
@@ -54,7 +54,7 @@
             </template>
           </q-input>
         </div>
-        <div class="row q-mb-xl">
+        <div class="row q-mb-lg">
           <q-btn @click="submitSave" color="primary" size="lg">Save</q-btn>
         </div>
       </div>
