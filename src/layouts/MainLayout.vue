@@ -63,6 +63,7 @@
               </div>
 
               <SearchField />
+              <CartIcon class="q-ml-xl cursor-pointer" />
             </q-toolbar-title>
           </div>
         </template>
@@ -81,6 +82,7 @@ import { mapActions } from 'vuex';
 import { mapGetters } from 'vuex';
 import { defineComponent, ref } from 'vue';
 import SearchField from './SearchField';
+import CartIcon from '../components/CartIcon';
 // import EssentialLink from 'components/EssentialLink.vue';
 // import Cart from '../pages/Store/Cart';
 
@@ -132,7 +134,7 @@ const linksList = [
 export default defineComponent({
   name: 'MainLayout',
   // components: { SearchField, Cart },
-  components: { SearchField },
+  components: { SearchField, CartIcon },
 
   data() {
     return {
