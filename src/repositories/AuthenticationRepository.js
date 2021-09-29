@@ -1,5 +1,7 @@
 const axios = require('axios');
 
+axios.defaults.withCredentials = true;
+
 const baseURL = 'http://localhost:8000/api/senang/auth';
 
 export default {
